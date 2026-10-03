@@ -1,0 +1,531 @@
+ <!DOCTYPE html>
+<html lang="en" id="htmlRoot">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AIKTC Campus Hub - Theory Assignments Tracker</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="manifest" href="manifest.json">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .glass-card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .light .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            border: 1px solid rgba(0, 0, 0, 0.06);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+        }
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .light .glass-panel {
+            background: rgba(255, 255, 255, 0.92);
+            border: 1px solid rgba(0, 0, 0, 0.08);
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-900 text-slate-100 min-h-screen flex flex-col selection:bg-indigo-500 selection:text-white transition-colors duration-300" id="bodyTheme">
+
+    <!-- Top Navigation Bar -->
+    <header class="glass-panel border-b border-slate-800 light:border-slate-200 sticky top-0 z-30 shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-12 h-12 rounded-full bg-white p-1 shadow-md border border-indigo-500/30 flex items-center justify-center overflow-hidden">
+                    <img src="logo.png" alt="AIKTC Logo" onerror="this.src='https://placehold.co/100x100?text=AIKTC'" class="w-full h-full object-contain">
+                </div>
+                <div>
+                    <h2 class="font-bold text-base leading-tight">Theory Assignments Tracker</h2>
+                    <p class="text-xs font-semibold text-indigo-400" id="userBadgeText">Loading profile...</p>
+                </div>
+            </div>
+            <div class="flex items-center space-x-2.5">
+                <a href="tracker.html" class="text-xs font-semibold bg-indigo-600/30 hover:bg-indigo-600/50 text-indigo-300 px-3.5 py-2.5 rounded-xl transition border border-indigo-500/40 flex items-center space-x-1.5 shadow-sm">
+                    <i class="fa-solid fa-calendar-check text-xs"></i>
+                    <span>Attendance Tracker</span>
+                </a>
+                <button onclick="toggleTheme()" class="p-2.5 rounded-xl bg-slate-800/80 light:bg-slate-200 hover:bg-slate-700 text-slate-300 light:text-slate-700 transition border border-slate-700 light:border-slate-300">
+                    <i id="themeIcon" class="fa-solid fa-moon text-xs"></i>
+                </button>
+                <a href="index.html" class="text-xs font-semibold bg-slate-800/80 light:bg-slate-200 hover:bg-slate-700 text-slate-200 light:text-slate-800 px-3.5 py-2.5 rounded-xl transition flex items-center space-x-1.5 border border-slate-700 light:border-slate-300 shadow-sm">
+                    <i class="fa-solid fa-arrow-left text-pink-400"></i>
+                    <span>Switch Profile</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1 w-full space-y-6">
+        
+        <!-- Summary Cards Strip -->
+        <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
+            <div class="glass-card p-5 rounded-2xl border border-slate-800 light:border-slate-200 flex items-center justify-between">
+                <div>
+                    <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Total Assignments</span>
+                    <h3 class="text-2xl font-extrabold mt-1" id="statTotal">0</h3>
+                </div>
+                <div class="w-11 h-11 rounded-xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center text-lg border border-indigo-500/20">
+                    <i class="fa-solid fa-list-check"></i>
+                </div>
+            </div>
+
+            <div class="glass-card p-5 rounded-2xl border border-slate-800 light:border-slate-200 flex items-center justify-between">
+                <div>
+                    <span class="text-[11px] font-bold uppercase tracking-wider text-emerald-400">Submitted</span>
+                    <h3 class="text-2xl font-extrabold text-emerald-400 mt-1" id="statSubmitted">0</h3>
+                </div>
+                <div class="w-11 h-11 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-lg border border-emerald-500/20">
+                    <i class="fa-solid fa-check-double"></i>
+                </div>
+            </div>
+
+            <div class="glass-card p-5 rounded-2xl border border-slate-800 light:border-slate-200 flex items-center justify-between">
+                <div>
+                    <span class="text-[11px] font-bold uppercase tracking-wider text-amber-400">Pending</span>
+                    <h3 class="text-2xl font-extrabold text-amber-400 mt-1" id="statPending">0</h3>
+                </div>
+                <div class="w-11 h-11 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center text-lg border border-amber-500/20">
+                    <i class="fa-solid fa-clock"></i>
+                </div>
+            </div>
+
+            <div class="glass-card p-5 rounded-2xl border border-slate-800 light:border-slate-200 flex items-center justify-between">
+                <div>
+                    <span class="text-[11px] font-bold uppercase tracking-wider text-rose-400">Overdue (Past Due)</span>
+                    <h3 class="text-2xl font-extrabold text-rose-400 mt-1" id="statOverdue">0</h3>
+                </div>
+                <div class="w-11 h-11 rounded-xl bg-rose-500/10 text-rose-400 flex items-center justify-center text-lg border border-rose-500/20">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action / Filter Strip -->
+        <div class="glass-card rounded-2xl p-5 border border-slate-800 light:border-slate-200 flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div>
+                <h3 class="text-lg font-bold">Theory Subject Deliverables (CA-1 / Mid-Term Cycle)</h3>
+                <p class="text-xs text-slate-400">Capped to the active evaluation window (Sep 1 – Oct 15, 2026). Late November/December slots excluded.</p>
+            </div>
+            
+            <div class="flex flex-wrap items-center gap-2.5">
+                <button onclick="generateRandomTheoryAssignments()" class="px-4 py-2 bg-gradient-to-r from-indigo-500 to-purple-600 hover:opacity-90 text-white font-bold text-xs rounded-xl shadow-md transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-arrows-rotate"></i>
+                    <span>Generate Realistic Active Slots</span>
+                </button>
+                <button onclick="addNewCustomTaskModal()" class="px-3.5 py-2 bg-slate-800 light:bg-slate-200 hover:bg-slate-700 text-slate-200 light:text-slate-800 font-semibold text-xs rounded-xl border border-slate-700 light:border-slate-300 transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-plus"></i>
+                    <span>Add Task</span>
+                </button>
+                <select id="filterSubject" onchange="renderAssignmentList()" class="px-3 py-2 bg-slate-900 light:bg-slate-100 border border-slate-700 light:border-slate-300 rounded-xl text-xs font-semibold outline-none focus:ring-2 focus:ring-indigo-500">
+                    <option value="ALL">All Subjects</option>
+                </select>
+                <select id="filterStatus" onchange="renderAssignmentList()" class="px-3 py-2 bg-slate-900 light:bg-slate-100 border border-slate-700 light:border-slate-300 rounded-xl text-xs font-semibold outline-none focus:ring-2 focus:ring-indigo-500">
+                    <option value="ALL">All Statuses</option>
+                    <option value="PENDING">Pending Only</option>
+                    <option value="SUBMITTED">Submitted Only</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Assignments List Container -->
+        <div class="glass-card rounded-2xl p-5 border border-slate-800 light:border-slate-200">
+            <div id="assignmentList" class="space-y-3"></div>
+        </div>
+
+    </main>
+
+    <script>
+        const masterTimetables = {
+            "DIV-A (AIML1)": {
+                "Mon": [{ slots: [1], name: { ALL: "EM1" } }, { slots: [2], name: { ALL: "EC" } }, { slots: [3], name: { BATCH1: "PCC (L)", BATCH2: "WDL (L)", BATCH3: "TS (T)" } }],
+                "Tue": [{ slots: [1, 2], name: { ALL: "EM" } }, { slots: [3], name: { BATCH1: "WDL (L)", BATCH2: "PCC (L)", BATCH3: "ECL (L)" } }, { slots: [6], name: { ALL: "PCC" } }, { slots: [7], name: { ALL: "EC" } }, { slots: [8], name: { ALL: "UHV" } }],
+                "Wed": [{ slots: [1], name: { ALL: "CS" } }, { slots: [2], name: { ALL: "EC" } }, { slots: [3, 4], name: { ALL: "EM1" } }, { slots: [5], name: { BATCH1: "WDL (L)", BATCH2: "ECL (L)", BATCH3: "PCC (L)" } }, { slots: [7], name: { ALL: "UHV" } }, { slots: [8], name: { ALL: "SD/MENT" } }],
+                "Thu": [{ slots: [1], name: { BATCH1: "PCC (L)", BATCH2: "TS (T)", BATCH3: "WDL (L)" } }, { slots: [3, 4], name: { ALL: "PCC" } }, { slots: [5], name: { BATCH1: "ECL (L)", BATCH2: "PCC (L)", BATCH3: "WDL (L)" } }, { slots: [7], name: { ALL: "EM1" } }],
+                "Fri": [{ slots: [1], name: { BATCH1: "TS (T)", BATCH2: "WDL (L)", BATCH3: "PCC (L)" } }, { slots: [3], name: { ALL: "CS" } }, { slots: [4], name: { ALL: "EM1" } }, { slots: [9], name: { ALL: "TECHNO" } }],
+                "Sat": [], "Sun": []
+            },
+            "DIV-B (AIML2)": {
+                "Mon": [{ slots: [2], name: { ALL: "PCC" } }, { slots: [3], name: { ALL: "EM1" } }, { slots: [5], name: { BATCH1: "WDL (L)", BATCH2: "TS (T)", BATCH3: "PCC (L)" } }, { slots: [7], name: { ALL: "EC" } }],
+                "Tue": [{ slots: [1], name: { BATCH1: "PCC (L)", BATCH2: "ECL (L)", BATCH3: "WDL (L)" } }, { slots: [3], name: { ALL: "EM" } }, { slots: [5], name: { BATCH1: "WDL (L)", BATCH2: "PCC (L)", BATCH3: "TS (T)" } }, { slots: [7], name: { ALL: "EM1" } }, { slots: [8], name: { ALL: "SD/MENT" } }],
+                "Wed": [{ slots: [3, 4], name: { BATCH1: "TS (T)", BATCH2: "WDL (L)", BATCH3: "PCC (L)" } }, { slots: [6], name: { ALL: "UHV" } }, { slots: [7], name: { ALL: "EM1" } }, { slots: [8], name: { ALL: "EC" } }],
+                "Thu": [{ slots: [2], name: { ALL: "CS" } }, { slots: [3], name: { ALL: "UHV" } }, { slots: [5], name: { ALL: "EM" } }, { slots: [6], name: { ALL: "PCC" } }, { slots: [7], name: { BATCH1: "ECL (L)", BATCH2: "PCC (L)", BATCH3: "WDL (L)" } }],
+                "Fri": [{ slots: [2], name: { ALL: "CS" } }, { slots: [3], name: { ALL: "EM1" } }, { slots: [4], name: { ALL: "EC" } }, { slots: [7], name: { BATCH1: "PCC (L)", BATCH2: "WDL (L)", BATCH3: "ECL (L)" } }, { slots: [9], name: { ALL: "TECHNO" } }],
+                "Sat": [], "Sun": []
+            },
+            "DIV-C (CO1)": {
+                "Mon": [{ slots: [1], name: { BATCH1: "WDL (L)", BATCH2: "PCC (L)", BATCH3: "TS (T)" } }, { slots: [3], name: { ALL: "UHV" } }, { slots: [4], name: { ALL: "CS" } }, { slots: [6], name: { ALL: "EM1" } }],
+                "Tue": [{ slots: [1, 2], name: { BATCH1: "PCC (L)", BATCH2: "PCC (L)", BATCH3: "WDL (L)" } }, { slots: [3], name: { ALL: "EM" } }, { slots: [5], name: { BATCH1: "WDL (L)", BATCH2: "ETS (L)", BATCH3: "EC (L)" } }, { slots: [7], name: { ALL: "PCC" } }, { slots: [8], name: { ALL: "EC" } }],
+                "Wed": [{ slots: [3], name: { ALL: "CS" } }, { slots: [4], name: { ALL: "EM" } }, { slots: [6], name: { ALL: "EM1" } }, { slots: [7], name: { ALL: "EC" } }, { slots: [8], name: { ALL: "SD/MENT" } }],
+                "Thu": [{ slots: [1, 2], name: { BATCH1: "PCC (L)", BATCH2: "EC (L)", BATCH3: "WDL (L)" } }, { slots: [3], name: { ALL: "EC" } }, { slots: [4], name: { ALL: "EM1" } }, { slots: [6], name: { ALL: "PCC" } }, { slots: [7, 8], name: { BATCH1: "TS (T)", BATCH3: "PCC (L)" } }],
+                "Fri": [{ slots: [1], name: { ALL: "EM1" } }, { slots: [2], name: { ALL: "UHV" } }, { slots: [3], name: { BATCH1: "EC (L)", BATCH2: "WDL (L)", BATCH3: "PCC (L)" } }, { slots: [7], name: { BATCH2: "WDL (L)" } }, { slots: [9], name: { ALL: "TECHNO" } }],
+                "Sat": [], "Sun": []
+            },
+            "DIV-D (CO2)": {
+                "Mon": [{ slots: [1], name: { ALL: "EC" } }, { slots: [2], name: { ALL: "EM1" } }, { slots: [3], name: { ALL: "EM" } }, { slots: [5], name: { BATCH1: "PCC (L)", BATCH2: "EC (L)", BATCH3: "WDL (L)" } }],
+                "Tue": [{ slots: [2], name: { ALL: "EM1" } }, { slots: [3], name: { ALL: "EC" } }, { slots: [4], name: { ALL: "PCC" } }, { slots: [6], name: { ALL: "CS" } }, { slots: [7], name: { ALL: "EM" } }, { slots: [8], name: { ALL: "UHV" } }],
+                "Wed": [{ slots: [1], name: { ALL: "CS" } }, { slots: [2], name: { ALL: "EM1" } }, { slots: [3], name: { BATCH1: "EC (L)", BATCH2: "PCC (L)", BATCH3: "WDL (L)" } }, { slots: [6], name: { ALL: "UHV" } }, { slots: [7], name: { BATCH1: "WDL (L)", BATCH2: "PCC (L)", BATCH3: "TS (T)" } }],
+                "Thu": [{ slots: [3], name: { BATCH1: "PCC (L)", BATCH2: "ECL (L)", BATCH3: "WDL (L)" } }, { slots: [6], name: { ALL: "EC" } }, { slots: [7], name: { ALL: "SD/MENT" } }],
+                "Fri": [{ slots: [1], name: { BATCH1: "PCC (L)", BATCH2: "WDL (L)", BATCH3: "EC (L)" } }, { slots: [3], name: { ALL: "PCC" } }, { slots: [4], name: { ALL: "EM1" } }, { slots: [7], name: { BATCH1: "WDL (L)", BATCH2: "TS (T)", BATCH3: "PCC (L)" } }, { slots: [9], name: { ALL: "TECHNO" } }],
+                "Sat": [], "Sun": []
+            },
+            "DIV-E (DS)": {
+                "Mon": [{ slots: [2], name: { ALL: "EC" } }, { slots: [3], name: { BATCH1: "WDL (L)", BATCH2: "ECL (L)", BATCH3: "PCC (L)" } }, { slots: [6], name: { ALL: "EM1" } }],
+                "Tue": [{ slots: [2], name: { ALL: "EM1" } }, { slots: [3], name: { BATCH1: "PCC (L)", BATCH2: "WDL (L)", BATCH3: "TS (T)" } }, { slots: [6], name: { ALL: "CS" } }, { slots: [7], name: { BATCH1: "ECL (L)", BATCH2: "PCC (L)" } }],
+                "Wed": [{ slots: [1], name: { BATCH1: "WDL (L)", BATCH3: "ECL (L)" } }, { slots: [3], name: { ALL: "EM1" } }, { slots: [4], name: { ALL: "EC" } }, { slots: [6], name: { ALL: "EM" } }, { slots: [7], name: { ALL: "UHV" } }],
+                "Thu": [{ slots: [1], name: { ALL: "EM1" } }, { slots: [2], name: { ALL: "EM" } }, { slots: [3], name: { ALL: "EC" } }, { slots: [5], name: { BATCH1: "TS (T)", BATCH2: "PCC (L)", BATCH3: "WDL (L)" } }, { slots: [7], name: { ALL: "PCC" } }, { slots: [8], name: { ALL: "CS" } }],
+                "Fri": [{ slots: [1], name: { ALL: "UHV" } }, { slots: [2], name: { ALL: "PCC" } }, { slots: [3], name: { BATCH1: "WDL (L)", BATCH2: "TS (T)", BATCH3: "PCC (L)" } }, { slots: [7], name: { BATCH1: "PCC (L)", BATCH3: "WDL (L)" } }, { slots: [9], name: { ALL: "TECHNO" } }],
+                "Sat": [], "Sun": []
+            },
+            "DIV-F (ECE)": {
+                "Mon": [{ slots: [1], name: { ALL: "EM1" } }, { slots: [2], name: { ALL: "EP" } }, { slots: [3], name: { BATCH1: "CSL (L)", BATCH2: "TS (T)", BATCH3: "OOPL (L)" } }, { slots: [6], name: { ALL: "EM" } }, { slots: [7], name: { BATCH1: "TS (T)", BATCH2: "WDL (L)", BATCH3: "CSL (L)" } }],
+                "Tue": [{ slots: [1], name: { ALL: "CS" } }, { slots: [2], name: { ALL: "PCC" } }, { slots: [3], name: { ALL: "EP" } }, { slots: [4], name: { ALL: "EM1" } }, { slots: [6], name: { ALL: "UHV" } }, { slots: [7], name: { BATCH2: "OOPL (L)", BATCH3: "EPL (L)" } }],
+                "Wed": [{ slots: [1], name: { BATCH1: "OOPL (L)", BATCH2: "EPL (L)", BATCH3: "TS (T)" } }, { slots: [2], name: { BATCH1: "WDL (L)" } }, { slots: [3], name: { ALL: "EM" } }, { slots: [4], name: { ALL: "PCC" } }, { slots: [6], name: { ALL: "WDL" } }, { slots: [7], name: { ALL: "EM1" } }, { slots: [8], name: { ALL: "CS" } }],
+                "Thu": [{ slots: [3], name: { ALL: "EM1" } }, { slots: [4], name: { ALL: "WDL" } }, { slots: [6], name: { ALL: "SD/MENT" } }],
+                "Fri": [{ slots: [1], name: { BATCH1: "EPL (L)", BATCH2: "CSL (L)", BATCH3: "WDL (L)" } }, { slots: [3], name: { ALL: "UHV" } }, { slots: [4], name: { ALL: "EP" } }, { slots: [9], name: { ALL: "TECHNO" } }],
+                "Sat": [], "Sun": []
+            },
+            "DIV-G (ECS)": {
+                "Mon": [{ slots: [2], name: { ALL: "EM1" } }, { slots: [3], name: { ALL: "EP" } }, { slots: [4], name: { ALL: "PCC" } }, { slots: [6], name: { ALL: "CS" } }, { slots: [7], name: { ALL: "UHV" } }, { slots: [8], name: { ALL: "SD/MENT" } }],
+                "Tue": [{ slots: [1], name: { BATCH1: "WDL (L)", BATCH2: "TS (T)", BATCH3: "PCC (L)" } }, { slots: [3], name: { ALL: "PCC" } }, { slots: [4], name: { ALL: "CS" } }],
+                "Wed": [{ slots: [2], name: { ALL: "EM1" } }, { slots: [3], name: { ALL: "EP" } }, { slots: [4], name: { ALL: "UHV" } }, { slots: [6], name: { ALL: "EM" } }, { slots: [7], name: { BATCH1: "TS (T)", BATCH2: "EPL (L)", BATCH3: "WDL (L)" } }],
+                "Thu": [{ slots: [1], name: { BATCH1: "PCC (L)", BATCH2: "WDL (L)", BATCH3: "EPL (L)" } }, { slots: [3], name: { ALL: "EP" } }, { slots: [4], name: { ALL: "PCC" } }, { slots: [6], name: { ALL: "EM1" } }, { slots: [7], name: { BATCH3: "WDL (L)", BATCH1: "EPL (L)", BATCH2: "WDL (L)", BATCH3: "TS (T)" } }],
+                "Fri": [{ slots: [1], name: { BATCH1: "WDL (L)", BATCH2: "PCC (L)" } }, { slots: [3], name: { ALL: "EM" } }, { slots: [4], name: { ALL: "EM1" } }, { slots: [7], name: { BATCH3: "WDL (L)", BATCH1: "EPL (L)", BATCH2: "WDL (L)", BATCH3: "TS (T)" } }, { slots: [9], name: { ALL: "TECHNO" } }],
+                "Sat": [], "Sun": []
+            },
+            "DIV-H (MECH)": {
+                "Mon": [{ slots: [1], name: { BATCH1: "PCC (L)", BATCH2: "WDL (L)", BATCH3: "TS (T)" } }, { slots: [3], name: { ALL: "CS" } }, { slots: [4], name: { ALL: "EP" } }, { slots: [6], name: { ALL: "EM1" } }, { slots: [7], name: { BATCH1: "WDL (L)", BATCH3: "EPL (L)" } }],
+                "Tue": [{ slots: [1], name: { ALL: "CS" } }, { slots: [3], name: { ALL: "PCC" } }, { slots: [5], name: { BATCH1: "EPL (L)", BATCH2: "PCC (L)", BATCH3: "WDL (L)" } }, { slots: [7], name: { ALL: "EM1" } }, { slots: [8], name: { ALL: "UHV" } }],
+                "Wed": [{ slots: [2], name: { ALL: "EM1" } }, { slots: [3], name: { ALL: "UHV" } }, { slots: [4], name: { ALL: "EP" } }],
+                "Thu": [{ slots: [1], name: { BATCH1: "WDL (L)", BATCH2: "TS (T)", BATCH3: "PCC (L)" } }, { slots: [3], name: { ALL: "BEE" } }, { slots: [4], name: { ALL: "PCC" } }, { slots: [6], name: { BATCH1: "TS (T)", BATCH2: "EPL (L)", BATCH3: "WDL (L)" } }, { slots: [8], name: { ALL: "SD/MENT" } }],
+                "Fri": [{ slots: [2], name: { ALL: "EM1" } }, { slots: [3], name: { ALL: "EP" } }, { slots: [4], name: { ALL: "BEE" } }, { slots: [7], name: { BATCH2: "WDL (L)" } }, { slots: [9], name: { ALL: "TECHNO" } }],
+                "Sat": [], "Sun": []
+            },
+            "DIV-I (CIVIL)": {
+                "Mon": [{ slots: [1], name: { ALL: "EPL (L)" } }, { slots: [3], name: { ALL: "PCC" } }, { slots: [4], name: { ALL: "EM1" } }, { slots: [6], name: { ALL: "SAP" } }, { slots: [8], name: { ALL: "SD/MENT" } }],
+                "Tue": [{ slots: [2], name: { ALL: "EP" } }, { slots: [4], name: { ALL: "EGL (L)" } }, { slots: [6], name: { ALL: "EM1" } }, { slots: [7], name: { ALL: "PCC" } }, { slots: [8], name: { ALL: "UHV" } }],
+                "Wed": [{ slots: [3], name: { ALL: "UHV" } }, { slots: [5], name: { ALL: "PCC" } }, { slots: [7], name: { ALL: "CS" } }, { slots: [8], name: { ALL: "EM1" } }],
+                "Thu": [{ slots: [2], name: { ALL: "EGL (L)" } }, { slots: [4], name: { ALL: "EP" } }, { slots: [6], name: { ALL: "SAP" } }],
+                "Fri": [{ slots: [1], name: { ALL: "EM1" } }, { slots: [2], name: { ALL: "EP" } }, { slots: [3], name: { ALL: "PCC" } }, { slots: [4], name: { ALL: "CS" } }, { slots: [7], name: { ALL: "TS (T)" } }, { slots: [9], name: { ALL: "TECHNO" } }],
+                "Sat": [], "Sun": []
+            }
+        };
+
+        let currentUser = null;
+        let assignmentsList = [];
+        
+        // Real-World Term Calendar Bounds
+        const termStartDate = new Date(2026, 8, 1);   // September 1, 2026
+        const maxCycleDate = new Date(2026, 9, 15);   // October 15, 2026 (CA-1 Evaluation Cap)
+        const todayDate = new Date(2026, 9, 3, 23, 59, 59); // Current Live Term Date: Oct 3, 2026
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if (localStorage.getItem('aik_theme') === 'light') toggleTheme(true);
+
+            const savedUser = localStorage.getItem('aik_master_user');
+            if (!savedUser) {
+                window.location.href = 'index.html';
+                return;
+            }
+
+            currentUser = JSON.parse(savedUser);
+            document.getElementById('userBadgeText').innerText = `${currentUser.name} • ${currentUser.division} (Roll: ${currentUser.rollNo})`;
+
+            const savedAssignments = localStorage.getItem('aik_master_assignments');
+            if (savedAssignments) {
+                assignmentsList = JSON.parse(savedAssignments);
+                // Sanitize any existing December-stretched tasks
+                sanitizePastOutlierAssignments();
+            } else {
+                generateRandomTheoryAssignments(false);
+            }
+
+            populateSubjectFilter();
+            renderAssignmentList();
+        });
+
+        // Strip or clamp unrealistic December due dates if left over from previous tests
+        function sanitizePastOutlierAssignments() {
+            let modified = false;
+            assignmentsList.forEach(a => {
+                const d = new Date(a.dueDate);
+                if (d > maxCycleDate) {
+                    // Clamp to early October
+                    a.dueDate = "2026-10-06";
+                    modified = true;
+                }
+            });
+            if (modified) saveAssignments();
+        }
+
+        function toggleTheme(forceLight = false) {
+            const body = document.body;
+            const html = document.getElementById('htmlRoot');
+            const icon = document.getElementById('themeIcon');
+            
+            if (forceLight || !body.classList.contains('light')) {
+                body.classList.add('light');
+                html.classList.add('light');
+                body.className = "bg-gradient-to-br from-slate-100 via-indigo-50 to-slate-200 text-slate-900 min-h-screen flex flex-col selection:bg-indigo-500 selection:text-white transition-colors duration-300 light";
+                icon.className = "fa-solid fa-sun text-amber-500";
+                localStorage.setItem('aik_theme', 'light');
+            } else {
+                body.classList.remove('light');
+                html.classList.remove('light');
+                body.className = "bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-900 text-slate-100 min-h-screen flex flex-col selection:bg-indigo-500 selection:text-white transition-colors duration-300";
+                icon.className = "fa-solid fa-moon text-xs";
+                localStorage.setItem('aik_theme', 'dark');
+            }
+        }
+
+        function getTheorySubjectsForCurrentStudent() {
+            const timetable = masterTimetables[currentUser.division] || {};
+            const theorySubjects = new Set();
+
+            Object.values(timetable).forEach(daySlots => {
+                daySlots.forEach(entry => {
+                    const subName = entry.name.ALL || entry.name[currentUser.batch];
+                    if (subName) {
+                        if (!subName.includes('(L)') && !subName.includes('(T)') && subName !== "SD/MENT" && subName !== "TECHNO") {
+                            theorySubjects.add(subName.trim());
+                        }
+                    }
+                });
+            });
+
+            if (theorySubjects.size === 0) {
+                theorySubjects.add("EM1");
+                theorySubjects.add("EC");
+                theorySubjects.add("CS");
+                theorySubjects.add("PCC");
+            }
+            return Array.from(theorySubjects);
+        }
+
+        // Generate Real-World Term Assignments (Bounded to Sep 8 – Oct 10, 2026)
+        function generateRandomTheoryAssignments(alertOnComplete = true) {
+            const theorySubs = getTheorySubjectsForCurrentStudent();
+            const taskTypes = [
+                "Continuous Assessment #1 Problem Set",
+                "Module 1 Theory Proofs & Submission",
+                "Tutorial Question Bank (Part A)",
+                "Internal Test 1 Concept Summary"
+            ];
+
+            const generated = [];
+            let counter = 1;
+
+            theorySubs.forEach(subject => {
+                for (let i = 0; i < 2; i++) {
+                    const randomTask = taskTypes[(counter + i) % taskTypes.length];
+                    
+                    // Realistic Term Schedule:
+                    // Task 1: Due in mid/late September (Sep 14 to Sep 26) -> Already passed, simulates past deliverables
+                    // Task 2: Due in early October (Oct 2 to Oct 10) -> Immediate CA-1 deadline
+                    let dueDay, dueMonth;
+                    if (i === 0) {
+                        dueMonth = 8; // September
+                        dueDay = 14 + ((counter * 3) % 12); // Sep 14 - Sep 26
+                    } else {
+                        dueMonth = 9; // October
+                        dueDay = 3 + ((counter * 2) % 8);   // Oct 3 - Oct 10
+                    }
+
+                    const dueDateStr = `2026-${String(dueMonth + 1).padStart(2, '0')}-${String(dueDay).padStart(2, '0')}`;
+                    const isDuePast = new Date(2026, dueMonth, dueDay) < todayDate;
+
+                    // Realistic state simulation:
+                    const isSubmitted = isDuePast ? (counter % 3 !== 0) : false;
+                    let submittedDate = isSubmitted ? "2026-09-22" : null;
+
+                    generated.push({
+                        id: `TH-ASG-${counter++}`,
+                        subject: subject,
+                        title: `${subject} — ${randomTask}`,
+                        dueDate: dueDateStr,
+                        submitted: isSubmitted,
+                        submittedDate: submittedDate
+                    });
+                }
+            });
+
+            assignmentsList = generated;
+            saveAssignments();
+            populateSubjectFilter();
+            renderAssignmentList();
+
+            if (alertOnComplete) alert(`Generated ${assignmentsList.length} realistic coursework deliverables (Capped to CA-1 Term Window)!`);
+        }
+
+        // Toggle Submission State (With Real-World Date Bounds)
+        function toggleSubmission(asgId) {
+            const item = assignmentsList.find(a => a.id === asgId);
+            if (!item) return;
+
+            if (!item.submitted) {
+                // Cannot mark as submitted in the future past today (Oct 3, 2026)
+                const now = new Date();
+                const currentDateKey = "2026-10-03";
+
+                item.submitted = true;
+                item.submittedDate = currentDateKey;
+            } else {
+                item.submitted = false;
+                item.submittedDate = null;
+            }
+
+            saveAssignments();
+            renderAssignmentList();
+        }
+
+        function addNewCustomTaskModal() {
+            const theorySubs = getTheorySubjectsForCurrentStudent();
+            const subject = prompt(`Enter Theory Subject (${theorySubs.join(', ')}):`, theorySubs[0]);
+            if (!subject) return;
+
+            const title = prompt("Enter Assignment Title:");
+            if (!title) return;
+
+            const dueDate = prompt("Enter Due Date between 2026-09-01 and 2026-10-15 (YYYY-MM-DD):", "2026-10-08");
+            if (!dueDate) return;
+
+            const parsedDue = new Date(dueDate);
+            if (isNaN(parsedDue.getTime()) || parsedDue < termStartDate || parsedDue > maxCycleDate) {
+                alert("Invalid Date: Due dates must remain within the active academic term window (September 1, 2026 – October 15, 2026).");
+                return;
+            }
+
+            assignmentsList.unshift({
+                id: `CUSTOM-${Date.now()}`,
+                subject: subject.trim().toUpperCase(),
+                title: title.trim(),
+                dueDate: dueDate,
+                submitted: false,
+                submittedDate: null
+            });
+
+            saveAssignments();
+            populateSubjectFilter();
+            renderAssignmentList();
+        }
+
+        function deleteAssignment(asgId) {
+            assignmentsList = assignmentsList.filter(a => a.id !== asgId);
+            saveAssignments();
+            renderAssignmentList();
+        }
+
+        function saveAssignments() {
+            localStorage.setItem('aik_master_assignments', JSON.stringify(assignmentsList));
+        }
+
+        function populateSubjectFilter() {
+            const select = document.getElementById('filterSubject');
+            const currentVal = select.value;
+            select.innerHTML = '<option value="ALL">All Theory Subjects</option>';
+            
+            const distinctSubjects = [...new Set(assignmentsList.map(a => a.subject))];
+            distinctSubjects.forEach(sub => {
+                const opt = document.createElement('option');
+                opt.value = sub;
+                opt.innerText = sub;
+                select.appendChild(opt);
+            });
+
+            if (distinctSubjects.includes(currentVal)) select.value = currentVal;
+        }
+
+        function renderAssignmentList() {
+            const listEl = document.getElementById('assignmentList');
+            const subFilter = document.getElementById('filterSubject').value;
+            const statusFilter = document.getElementById('filterStatus').value;
+
+            listEl.innerHTML = '';
+
+            let total = assignmentsList.length;
+            let submittedCount = 0;
+            let overdueCount = 0;
+
+            assignmentsList.forEach(item => {
+                if (item.submitted) submittedCount++;
+                else if (new Date(item.dueDate) < todayDate) overdueCount++;
+            });
+
+            const pendingCount = total - submittedCount;
+            document.getElementById('statTotal').innerText = total;
+            document.getElementById('statSubmitted').innerText = submittedCount;
+            document.getElementById('statPending').innerText = pendingCount;
+            document.getElementById('statOverdue').innerText = overdueCount;
+
+            const filtered = assignmentsList.filter(item => {
+                const matchSub = (subFilter === "ALL" || item.subject === subFilter);
+                const matchStatus = (statusFilter === "ALL") ||
+                                    (statusFilter === "SUBMITTED" && item.submitted) ||
+                                    (statusFilter === "PENDING" && !item.submitted);
+                return matchSub && matchStatus;
+            });
+
+            if (filtered.length === 0) {
+                listEl.innerHTML = `
+                    <div class="text-center py-12 text-slate-400 space-y-2">
+                        <i class="fa-solid fa-folder-open text-3xl opacity-40"></i>
+                        <p class="text-xs">No assignments match your active filter.</p>
+                    </div>`;
+                return;
+            }
+
+            filtered.forEach(item => {
+                const isOverdue = !item.submitted && (new Date(item.dueDate) < todayDate);
+                
+                const card = document.createElement('div');
+                card.className = `p-4 rounded-xl border transition flex flex-col sm:flex-row sm:items-center justify-between gap-3 ${
+                    item.submitted 
+                        ? 'bg-emerald-950/20 light:bg-emerald-50/50 border-emerald-800/30 light:border-emerald-200' 
+                        : (isOverdue ? 'bg-rose-950/20 light:bg-rose-50 border-rose-800/40' : 'bg-slate-900/60 light:bg-white border-slate-800 light:border-slate-200')
+                }`;
+
+                card.innerHTML = `
+                    <div class="flex items-start space-x-3.5">
+                        <div class="pt-0.5">
+                            <input type="checkbox" ${item.submitted ? 'checked' : ''} onchange="toggleSubmission('${item.id}')" class="w-5 h-5 rounded-md border-slate-700 text-indigo-600 focus:ring-indigo-500 cursor-pointer">
+                        </div>
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <span class="px-2 py-0.5 rounded-md text-[10px] font-bold bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">${item.subject}</span>
+                                <span class="text-xs font-semibold ${item.submitted ? 'text-slate-400 line-through' : 'text-slate-100 light:text-slate-800'}">${item.title}</span>
+                                ${isOverdue ? '<span class="text-[9px] font-bold bg-rose-500/20 text-rose-400 px-1.5 py-0.2 rounded border border-rose-500/30 uppercase">Overdue</span>' : ''}
+                            </div>
+                            <div class="text-[11px] text-slate-400 mt-1 flex items-center gap-2">
+                                <span><i class="fa-regular fa-calendar mr-1"></i>Due: <strong>${item.dueDate}</strong></span>
+                                ${item.submitted ? `<span class="text-emerald-400"><i class="fa-solid fa-check ml-1 mr-1"></i>Completed on ${item.submittedDate || 'Yes'}</span>` : ''}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center space-x-2 self-end sm:self-center">
+                        <button onclick="toggleSubmission('${item.id}')" class="px-3 py-1.5 rounded-xl text-xs font-bold transition ${
+                            item.submitted
+                                ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500/30'
+                                : 'bg-indigo-600 hover:bg-indigo-500 text-white shadow-sm'
+                        }">
+                            ${item.submitted ? '<i class="fa-solid fa-check mr-1"></i> Submitted' : 'Mark Done'}
+                        </button>
+                        <button onclick="deleteAssignment('${item.id}')" class="text-slate-500 hover:text-rose-400 p-1.5 transition">
+                            <i class="fa-solid fa-trash-can text-xs"></i>
+                        </button>
+                    </div>
+                `;
+                listEl.appendChild(card);
+            });
+        }
+    </script>
+</body>
+</html>
