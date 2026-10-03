@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en" id="htmlRoot">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AIKTC Campus Hub - Student Gateway</title>
+    <title>AIKTC Campus Hub - Unified Gateway</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome for Icons -->
@@ -13,82 +13,120 @@
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
         body { font-family: 'Plus Jakarta Sans', sans-serif; }
         .glass-panel {
-            background: rgba(15, 23, 42, 0.75);
+            background: rgba(15, 23, 42, 0.78);
             backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
         .light .glass-panel {
-            background: rgba(255, 255, 255, 0.88);
+            background: rgba(255, 255, 255, 0.9);
             border: 1px solid rgba(0, 0, 0, 0.08);
             box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05);
         }
     </style>
 </head>
-<body class="bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-900 text-slate-100 min-h-screen flex items-center justify-center p-4 selection:bg-indigo-500 selection:text-white transition-colors duration-300" id="bodyTheme">
+<body class="bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-900 text-slate-100 min-h-screen flex flex-col justify-between p-4 sm:p-6 selection:bg-indigo-500 selection:text-white transition-colors duration-300" id="bodyTheme">
 
-    <!-- Theme Toggle Button -->
-    <button onclick="toggleTheme()" class="absolute top-6 right-6 p-3 rounded-2xl bg-slate-800/80 hover:bg-slate-700 text-slate-300 border border-slate-700 transition shadow-md">
-        <i id="themeIcon" class="fa-solid fa-moon"></i>
-    </button>
-
-    <div class="glass-panel rounded-3xl shadow-2xl max-w-md w-full p-8 space-y-6 transform transition-all shadow-indigo-950/50">
-        <div class="text-center space-y-3">
-            <div class="inline-flex items-center justify-center w-24 h-24 rounded-full bg-white shadow-xl shadow-indigo-500/20 p-2 border-2 border-indigo-500/30">
-                <img src="logo.png" alt="AIKTC Logo" onerror="this.src='https://placehold.co/100x100?text=AIKTC'" class="w-full h-full object-contain rounded-full">
+    <!-- Top Navigation Header -->
+    <header class="w-full max-w-4xl mx-auto flex items-center justify-between py-2">
+        <div class="flex items-center space-x-2.5">
+            <div class="w-10 h-10 rounded-full bg-white p-1 border border-indigo-500/30 flex items-center justify-center overflow-hidden shadow-sm">
+                <img src="logo.png" alt="AIKTC Logo" onerror="this.src='https://placehold.co/100x100?text=AIKTC'" class="w-full h-full object-contain">
             </div>
             <div>
-                <h1 class="text-2xl font-extrabold tracking-tight">AIKTC Campus Hub</h1>
-                <p class="text-xs text-slate-400 mt-1">Official Student Attendance & Assignments Portal</p>
+                <span class="text-sm font-bold tracking-tight block">AIKTC Campus Hub</span>
+                <span class="text-[10px] text-indigo-400 font-semibold block">Academic Risk Identification & Support Suite</span>
             </div>
         </div>
 
-        <form id="setupForm" class="space-y-4">
-            <div>
-                <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Full Name</label>
-                <input type="text" id="studentNameInput" required placeholder="e.g. Ayaan Shaikh" class="w-full px-4 py-3 rounded-xl bg-slate-900/80 border border-slate-700 focus:ring-2 focus:ring-indigo-500 outline-none transition text-sm text-white placeholder-slate-500">
-            </div>
-            <div>
-                <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Roll Number / UID</label>
-                <input type="text" id="rollNoInput" required placeholder="e.g. 2026-AIML-01" class="w-full px-4 py-3 rounded-xl bg-slate-900/80 border border-slate-700 focus:ring-2 focus:ring-indigo-500 outline-none transition text-sm text-white placeholder-slate-500">
-            </div>
-            <div class="grid grid-cols-2 gap-3">
-                <div>
-                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Division</label>
-                    <select id="divisionInput" class="w-full px-3 py-3 rounded-xl bg-slate-900/80 border border-slate-700 focus:ring-2 focus:ring-indigo-500 outline-none transition text-xs text-white">
-                        <option value="DIV-A (AIML1)">Div A (AIML1)</option>
-                        <option value="DIV-B (AIML2)">Div B (AIML2)</option>
-                        <option value="DIV-C (CO1)">Div C (CO1)</option>
-                        <option value="DIV-D (CO2)">Div D (CO2)</option>
-                        <option value="DIV-E (DS)">Div E (DS)</option>
-                        <option value="DIV-F (ECE)">Div F (ECE)</option>
-                        <option value="DIV-G (ECS)">Div G (ECS)</option>
-                        <option value="DIV-H (MECH)">Div H (MECH)</option>
-                        <option value="DIV-I (CIVIL)">Div I (Civil)</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Batch</label>
-                    <select id="batchInput" class="w-full px-3 py-3 rounded-xl bg-slate-900/80 border border-slate-700 focus:ring-2 focus:ring-indigo-500 outline-none transition text-xs text-white">
-                        <option value="BATCH1">Batch 1</option>
-                        <option value="BATCH2">Batch 2</option>
-                        <option value="BATCH3">Batch 3</option>
-                    </select>
-                </div>
+        <div class="flex items-center space-x-2">
+            <!-- Faculty Portal Direct Shortcut -->
+            <a href="admin.html" class="text-xs font-bold px-3.5 py-2 rounded-xl bg-purple-600/20 hover:bg-purple-600/30 text-purple-300 border border-purple-500/30 transition flex items-center space-x-1.5 shadow-sm">
+                <i class="fa-solid fa-shield-halved text-xs"></i>
+                <span>Faculty Console</span>
+            </a>
+            <!-- Theme Toggle -->
+            <button onclick="toggleTheme()" class="p-2 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-300 border border-slate-700 transition">
+                <i id="themeIcon" class="fa-solid fa-moon text-xs"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Central Hub Gateway -->
+    <main class="w-full max-w-md mx-auto my-auto py-6">
+        <div class="glass-panel rounded-3xl shadow-2xl p-6 sm:p-8 space-y-6 border border-slate-800">
+            
+            <div class="text-center space-y-2">
+                <h1 class="text-xl font-extrabold tracking-tight">Student Identity Gateway</h1>
+                <p class="text-xs text-slate-400">Enter your details to access attendance or theory coursework trackers.</p>
             </div>
 
-            <div class="pt-2 space-y-2.5">
-                <button type="button" onclick="saveAndNavigate('tracker.html')" class="w-full py-3.5 px-4 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 hover:opacity-95 text-white font-bold rounded-xl shadow-lg shadow-purple-500/25 transition text-sm flex items-center justify-center space-x-2">
-                    <i class="fa-solid fa-calendar-check text-xs"></i>
-                    <span>Launch Attendance Tracker</span>
-                    <i class="fa-solid fa-arrow-right text-xs"></i>
-                </button>
-                <button type="button" onclick="saveAndNavigate('assignments.html')" class="w-full py-3 px-4 bg-slate-800/90 hover:bg-slate-700 text-indigo-300 font-bold rounded-xl border border-indigo-500/30 transition text-sm flex items-center justify-center space-x-2">
-                    <i class="fa-solid fa-list-check text-xs"></i>
-                    <span>Launch Theory Assignments</span>
-                </button>
+            <!-- Student Profile Form -->
+            <form id="setupForm" class="space-y-4" onsubmit="event.preventDefault()">
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Full Name</label>
+                    <input type="text" id="studentNameInput" required placeholder="e.g. Ayaan Shaikh" class="w-full px-4 py-2.5 rounded-xl bg-slate-900/90 border border-slate-700 focus:ring-2 focus:ring-indigo-500 outline-none text-xs text-white placeholder-slate-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Roll Number / UID</label>
+                    <input type="text" id="rollNoInput" required placeholder="e.g. 26-AIML-101" class="w-full px-4 py-2.5 rounded-xl bg-slate-900/90 border border-slate-700 focus:ring-2 focus:ring-indigo-500 outline-none text-xs text-white placeholder-slate-500">
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Division</label>
+                        <select id="divisionInput" class="w-full px-3 py-2.5 rounded-xl bg-slate-900/90 border border-slate-700 focus:ring-2 focus:ring-indigo-500 outline-none text-xs text-white">
+                            <option value="DIV-A (AIML1)">Div A (AIML1)</option>
+                            <option value="DIV-B (AIML2)">Div B (AIML2)</option>
+                            <option value="DIV-C (CO1)">Div C (CO1)</option>
+                            <option value="DIV-D (CO2)">Div D (CO2)</option>
+                            <option value="DIV-E (DS)">Div E (DS)</option>
+                            <option value="DIV-F (ECE)">Div F (ECE)</option>
+                            <option value="DIV-G (ECS)">Div G (ECS)</option>
+                            <option value="DIV-H (MECH)">Div H (MECH)</option>
+                            <option value="DIV-I (CIVIL)">Div I (Civil)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Batch</label>
+                        <select id="batchInput" class="w-full px-3 py-2.5 rounded-xl bg-slate-900/90 border border-slate-700 focus:ring-2 focus:ring-indigo-500 outline-none text-xs text-white">
+                            <option value="BATCH1">Batch 1</option>
+                            <option value="BATCH2">Batch 2</option>
+                            <option value="BATCH3">Batch 3</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Launch Options -->
+                <div class="pt-2 space-y-2">
+                    <button type="button" onclick="submitAndNavigate('tracker.html')" class="w-full py-3 px-4 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 hover:opacity-95 text-white font-bold rounded-xl shadow-lg transition text-xs flex items-center justify-center space-x-2">
+                        <i class="fa-solid fa-calendar-check"></i>
+                        <span>Launch Attendance Tracker</span>
+                        <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                    </button>
+
+                    <button type="button" onclick="submitAndNavigate('assignments.html')" class="w-full py-2.5 px-4 bg-slate-800/90 hover:bg-slate-700 text-indigo-300 font-bold rounded-xl border border-indigo-500/30 transition text-xs flex items-center justify-center space-x-2">
+                        <i class="fa-solid fa-book-open"></i>
+                        <span>Launch Theory Assignments</span>
+                        <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                    </button>
+                </div>
+            </form>
+
+            <!-- Bottom Divider: Administrative Entry -->
+            <div class="pt-4 border-t border-slate-800/80 text-center">
+                <span class="text-[11px] text-slate-400 block mb-2">Faculty, Mentor, or Competition Evaluator?</span>
+                <a href="admin.html" class="inline-flex items-center space-x-2 px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-xs font-semibold text-slate-200 hover:text-white transition shadow-sm">
+                    <i class="fa-solid fa-lock text-purple-400 text-xs"></i>
+                    <span>Open Faculty Triage & Intervention Console</span>
+                </a>
             </div>
-        </form>
-    </div>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="w-full text-center py-2 text-[11px] text-slate-500">
+        AIKTC Department of CSE (AIML) • BvB 2026 PS-02 Architecture
+    </footer>
 
     <script>
         function toggleTheme() {
@@ -98,14 +136,14 @@
             if (body.classList.contains('light')) {
                 body.classList.remove('light');
                 html.classList.remove('light');
-                body.className = "bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-900 text-slate-100 min-h-screen flex items-center justify-center p-4 selection:bg-indigo-500 selection:text-white transition-colors duration-300";
-                icon.className = "fa-solid fa-moon";
+                body.className = "bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-900 text-slate-100 min-h-screen flex flex-col justify-between p-4 sm:p-6 selection:bg-indigo-500 selection:text-white transition-colors duration-300";
+                icon.className = "fa-solid fa-moon text-xs";
                 localStorage.setItem('aik_theme', 'dark');
             } else {
                 body.classList.add('light');
                 html.classList.add('light');
-                body.className = "bg-gradient-to-br from-slate-100 via-indigo-50 to-slate-200 text-slate-900 min-h-screen flex items-center justify-center p-4 selection:bg-indigo-500 selection:text-white transition-colors duration-300 light";
-                icon.className = "fa-solid fa-sun text-amber-500";
+                body.className = "bg-gradient-to-br from-slate-100 via-indigo-50 to-slate-200 text-slate-900 min-h-screen flex flex-col justify-between p-4 sm:p-6 selection:bg-indigo-500 selection:text-white transition-colors duration-300 light";
+                icon.className = "fa-solid fa-sun text-amber-500 text-xs";
                 localStorage.setItem('aik_theme', 'light');
             }
         }
@@ -120,15 +158,15 @@
                     if (u.rollNo) document.getElementById('rollNoInput').value = u.rollNo;
                     if (u.division) document.getElementById('divisionInput').value = u.division;
                     if (u.batch) document.getElementById('batchInput').value = u.batch;
-                } catch(e) {}
+                } catch(e){}
             }
         });
 
-        function saveAndNavigate(destination) {
+        function submitAndNavigate(targetUrl) {
             const name = document.getElementById('studentNameInput').value.trim();
             const rollNo = document.getElementById('rollNoInput').value.trim();
             if (!name || !rollNo) {
-                alert("Please fill in your Name and UID/Roll Number.");
+                alert("Please provide your full name and roll number.");
                 return;
             }
             const user = {
@@ -138,7 +176,7 @@
                 batch: document.getElementById('batchInput').value
             };
             localStorage.setItem('aik_master_user', JSON.stringify(user));
-            window.location.href = destination;
+            window.location.href = targetUrl;
         }
     </script>
 </body>

@@ -53,7 +53,7 @@
                     <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Faculty ID</label>
                     <div class="relative">
                         <i class="fa-solid fa-envelope absolute left-4 top-3.5 text-slate-500 text-xs"></i>
-                        <input type="text" id="f_token_id" placeholder="mentor@aiktc.ac.in" autocomplete="off" onkeydown="if(event.key==='Enter')decryptAndUnlock()" class="w-full pl-10 pr-4 py-3 rounded-xl bg-slate-900/90 border border-slate-700 focus:ring-2 focus:ring-indigo-500 outline-none text-xs text-white">
+                        <input type="text" id="f_token_id" placeholder="mentor@aiktc.ac.in" value="" autocomplete="off" onkeydown="if(event.key==='Enter')decryptAndUnlock()" class="w-full pl-10 pr-4 py-3 rounded-xl bg-slate-900/90 border border-slate-700 focus:ring-2 focus:ring-indigo-500 outline-none text-xs text-white">
                     </div>
                 </div>
 
@@ -61,7 +61,7 @@
                     <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Passphrase</label>
                     <div class="relative flex items-center">
                         <i class="fa-solid fa-key absolute left-4 text-slate-500 text-xs"></i>
-                        <input type="password" id="f_token_secret" placeholder="••••••••" autocomplete="new-password" onkeydown="if(event.key==='Enter')decryptAndUnlock()" class="w-full pl-10 pr-11 py-3 rounded-xl bg-slate-900/90 border border-slate-700 focus:ring-2 focus:ring-indigo-500 outline-none text-xs text-white">
+                        <input type="password" id="f_token_secret" placeholder="••••••••" value="" autocomplete="new-password" onkeydown="if(event.key==='Enter')decryptAndUnlock()" class="w-full pl-10 pr-11 py-3 rounded-xl bg-slate-900/90 border border-slate-700 focus:ring-2 focus:ring-indigo-500 outline-none text-xs text-white">
                         <button type="button" onclick="togglePasswordVisibility()" class="absolute right-3.5 text-slate-400 hover:text-indigo-400 p-1 transition">
                             <i id="togglePassIcon" class="fa-solid fa-eye-slash text-xs"></i>
                         </button>
@@ -80,7 +80,7 @@
 
             <div class="text-center">
                 <a href="index.html" class="text-xs text-slate-500 hover:text-slate-300 transition">
-                    <i class="fa-solid fa-arrow-left mr-1"></i> Return to Student Gateway
+                    <i class="fa-solid fa-arrow-left mr-1"></i> Return to Main Gateway
                 </a>
             </div>
         </div>
@@ -172,13 +172,12 @@
     </div>
 
     <!-- ========================================== -->
-    <!-- 4. JAVASCRIPT: 4-LAYER RISK ENGINE         -->
+    <!-- 4. JAVASCRIPT: ENGINE & AUTOWIPE           -->
     <!-- ========================================== -->
     <script>
         const TARGET_USER_HASH = "81be68b5561b369ff227eb098555e09f5fa8cfa103eb3089ef0cbcf18dc81958"; // "mentor@aiktc.ac.in"
         const TARGET_PASS_HASH = "57a829141851e5e6ee60ab060ffc3ad4f8ee75aa81ba5fef5ef439b1654dfbbd"; // "admin2026"
 
-        // Master Cohort dataset representing your distinct archetypes
         const MASTER_SEED_DATA = [
             { 
                 rollNo: "26-AIML-101", 
@@ -186,9 +185,9 @@
                 division: "DIV-A (AIML1)", 
                 batch: "BATCH1", 
                 overallAtt: 68, 
-                trajectoryHistory: [90, 84, 76, 68], // Student B: Clear 4-week continuous decline
+                trajectoryHistory: [90, 84, 76, 68], 
                 labAtt: 54, 
-                assignments: { total: 6, submitted: 3, overdue: 3 }, // Late -> Late -> Missing
+                assignments: { total: 6, submitted: 3, overdue: 3 }, 
                 stage: "Watchlist", 
                 notes: ["Initial review triggered by correlated drop across labs and theory tasks."] 
             },
@@ -198,7 +197,7 @@
                 division: "DIV-A (AIML1)", 
                 batch: "BATCH2", 
                 overallAtt: 86, 
-                trajectoryHistory: [88, 58, 88, 86], // Student C: Isolated 1-week dip (Medical)
+                trajectoryHistory: [88, 58, 88, 86], 
                 labAtt: 84, 
                 assignments: { total: 6, submitted: 6, overdue: 0 }, 
                 stage: "Resolved / Stable", 
@@ -210,9 +209,9 @@
                 division: "DIV-E (DS)", 
                 batch: "BATCH3", 
                 overallAtt: 71, 
-                trajectoryHistory: [72, 70, 71, 71], // Student A: Borderline, but flat/stable
+                trajectoryHistory: [72, 70, 71, 71], 
                 labAtt: 76, 
-                assignments: { total: 6, submitted: 6, overdue: 0 }, // Assignments on time
+                assignments: { total: 6, submitted: 6, overdue: 0 }, 
                 stage: "Watchlist", 
                 notes: ["Borderline attendance, but trajectory is flat and assignments are on time."] 
             },
@@ -224,7 +223,7 @@
                 overallAtt: 89, 
                 trajectoryHistory: [92, 90, 89, 89], 
                 labAtt: 90, 
-                assignments: { total: 6, submitted: 2, overdue: 4 }, // High attendance, isolated task struggler
+                assignments: { total: 6, submitted: 2, overdue: 4 }, 
                 stage: "Outreach Scheduled", 
                 notes: ["Regular attendance high, but repeated missing submissions."] 
             },
@@ -246,7 +245,7 @@
         let activeDecryptedSession = false;
         let selectedStudentRoll = null;
 
-        // Auto-wipe inputs on boot
+        // Force Clear Inputs to Defeat Browser Autofill
         function clearCredentials() {
             const u = document.getElementById('f_token_id');
             const p = document.getElementById('f_token_secret');
@@ -254,6 +253,7 @@
             if (p) p.value = '';
         }
         window.addEventListener('DOMContentLoaded', clearCredentials);
+        window.addEventListener('load', clearCredentials);
         setTimeout(clearCredentials, 100);
         setTimeout(clearCredentials, 300);
 
@@ -399,9 +399,6 @@
             }
         }
 
-        // ==========================================
-        // 4-LAYER CONCEPTUAL PATTERN EVALUATOR
-        // ==========================================
         function evaluate4LayerPattern(s) {
             const hist = s.trajectoryHistory;
             const recent = hist[hist.length - 1];
@@ -409,22 +406,12 @@
             const deltaV = recent - prior;
             const asg = s.assignments;
 
-            // Layer 1: Current Status
             const isAttLow = s.overallAtt < 75;
             const hasOverdueAsg = asg.overdue > 0;
-
-            // Layer 2: Trend / Velocity
             const isDropping = deltaV < -4;
-            const isRecovering = deltaV > 4;
             const isFlat = Math.abs(deltaV) <= 4;
-
-            // Layer 3: Persistence
-            // Check if downward trend has lasted 3+ consecutive periods
             const isContinuousDecline = (hist[0] > hist[1]) && (hist[1] > hist[2]) && (hist[2] > hist[3]);
-            // Check if it's an isolated blip (Week 2 dip with Week 1 and Week 3 >= 80)
             const isAcuteBlip = (hist[1] < 65 && hist[0] >= 80 && hist[2] >= 80);
-
-            // Layer 4: Combined Pattern
             const bothWorsening = (isDropping || isAttLow) && (asg.overdue >= 2);
 
             let diagnosis = {
@@ -434,93 +421,37 @@
                 evidence: []
             };
 
-            // Rule Evaluation:
             if (isAcuteBlip) {
                 diagnosis.statusText = "Transient Fluctuation (Filtered)";
                 diagnosis.badgeClass = "text-teal-400 bg-teal-500/10 border-teal-500/30";
                 diagnosis.priorityWeight = 2;
-                diagnosis.evidence.push({
-                    layer: "Layer 3 • Persistence",
-                    text: "Isolated single-week dip detected followed by full recovery.",
-                    tag: "Filtered False Alarm",
-                    severity: "safe"
-                });
-                diagnosis.evidence.push({
-                    layer: "Layer 4 • Combined Signal",
-                    text: "Assignments remain on schedule; no systemic breakdown.",
-                    tag: "Non-Structural",
-                    severity: "safe"
-                });
+                diagnosis.evidence.push({ layer: "Layer 3 • Persistence", text: "Isolated single-week dip detected followed by full recovery.", tag: "Filtered False Alarm", severity: "safe" });
+                diagnosis.evidence.push({ layer: "Layer 4 • Combined Signal", text: "Assignments remain on schedule; no systemic breakdown.", tag: "Non-Structural", severity: "safe" });
             } else if (bothWorsening && isContinuousDecline) {
                 diagnosis.statusText = "Needs Immediate Attention";
                 diagnosis.badgeClass = "text-rose-400 bg-rose-500/10 border-rose-500/30";
                 diagnosis.priorityWeight = 5;
-                diagnosis.evidence.push({
-                    layer: "Layer 2 • Trend & Velocity",
-                    text: `Attendance is continuously sliding (${hist[0]}% ➔ ${recent}% over 4 weeks).`,
-                    tag: "Severe Downward Trend",
-                    severity: "high"
-                });
-                diagnosis.evidence.push({
-                    layer: "Layer 3 • Persistence",
-                    text: "Negative trajectory has persisted for 3+ consecutive evaluation windows.",
-                    tag: "Chronic Disengagement",
-                    severity: "high"
-                });
-                diagnosis.evidence.push({
-                    layer: "Layer 4 • Combined Pattern",
-                    text: `Multi-signal failure: Attendance drop is occurring alongside ${asg.overdue} overdue deliverables.`,
-                    tag: "Cross-Stream Breakdown",
-                    severity: "high"
-                });
+                diagnosis.evidence.push({ layer: "Layer 2 • Trend & Velocity", text: `Attendance is continuously sliding (${hist[0]}% ➔ ${recent}% over 4 weeks).`, tag: "Severe Downward Trend", severity: "high" });
+                diagnosis.evidence.push({ layer: "Layer 3 • Persistence", text: "Negative trajectory has persisted for 3+ consecutive evaluation windows.", tag: "Chronic Disengagement", severity: "high" });
+                diagnosis.evidence.push({ layer: "Layer 4 • Combined Pattern", text: `Multi-signal failure: Attendance drop is occurring alongside ${asg.overdue} overdue deliverables.`, tag: "Cross-Stream Breakdown", severity: "high" });
             } else if (isAttLow && isFlat && !hasOverdueAsg) {
                 diagnosis.statusText = "Advisory Observation (Mild)";
                 diagnosis.badgeClass = "text-amber-400 bg-amber-500/10 border-amber-500/30";
                 diagnosis.priorityWeight = 3;
-                diagnosis.evidence.push({
-                    layer: "Layer 1 • Current Status",
-                    text: `Attendance is slightly below 75% (${s.overallAtt}%), but trend is stable.`,
-                    tag: "Borderline Stable",
-                    severity: "medium"
-                });
-                diagnosis.evidence.push({
-                    layer: "Layer 4 • Combined Pattern",
-                    text: "Assignments are submitted on time; student is not structurally disengaged.",
-                    tag: "Single Signal Only",
-                    severity: "safe"
-                });
+                diagnosis.evidence.push({ layer: "Layer 1 • Current Status", text: `Attendance is slightly below 75% (${s.overallAtt}%), but trend is stable.`, tag: "Borderline Stable", severity: "medium" });
+                diagnosis.evidence.push({ layer: "Layer 4 • Combined Pattern", text: "Assignments are submitted on time; student is not structurally disengaged.", tag: "Single Signal Only", severity: "safe" });
             } else if (hasOverdueAsg && !isAttLow) {
                 diagnosis.statusText = "Targeted Academic Support";
                 diagnosis.badgeClass = "text-purple-400 bg-purple-500/10 border-purple-500/30";
                 diagnosis.priorityWeight = 4;
-                diagnosis.evidence.push({
-                    layer: "Layer 1 • Deliverable Deficit",
-                    text: `${asg.overdue} assignments are overdue despite high classroom presence (${s.overallAtt}%).`,
-                    tag: "Subject Task Struggle",
-                    severity: "medium"
-                });
-                diagnosis.evidence.push({
-                    layer: "Layer 4 • Combined Pattern",
-                    text: "Classroom attendance is healthy; targeted help on coursework required.",
-                    tag: "Isolated Academic Signal",
-                    severity: "medium"
-                });
+                diagnosis.evidence.push({ layer: "Layer 1 • Deliverable Deficit", text: `${asg.overdue} assignments are overdue despite high classroom presence (${s.overallAtt}%).`, tag: "Subject Task Struggle", severity: "medium" });
+                diagnosis.evidence.push({ layer: "Layer 4 • Combined Pattern", text: "Classroom attendance is healthy; targeted help on coursework required.", tag: "Isolated Academic Signal", severity: "medium" });
             } else {
                 diagnosis.statusText = "Consistent Engagement";
                 diagnosis.badgeClass = "text-emerald-400 bg-emerald-500/10 border-emerald-500/30";
                 diagnosis.priorityWeight = 1;
-                diagnosis.evidence.push({
-                    layer: "Layer 1 & 2 • Baseline & Trend",
-                    text: `High overall attendance (${s.overallAtt}%) with stable or positive trajectory.`,
-                    tag: "Healthy Trajectory",
-                    severity: "safe"
-                });
-                diagnosis.evidence.push({
-                    layer: "Layer 4 • Submission Record",
-                    text: "All theory coursework submitted on schedule.",
-                    tag: "Synchronized Success",
-                    severity: "safe"
-                });
+                diagnosis.evidence.push({ layer: "Layer 1 & 2 • Baseline & Trend", text: `High overall attendance (${s.overallAtt}%) with stable or positive trajectory.`, tag: "Healthy Trajectory", severity: "safe" });
+                diagnosis.evidence.push({ layer: "Layer 4 • Submission Record", text: "All theory coursework submitted on schedule.", tag: "Synchronized Success", severity: "safe" });
             }
 
             return { deltaV, diagnosis };
@@ -545,6 +476,10 @@
                             <button onclick="toggleTheme()" class="p-2.5 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-300 transition border border-slate-700">
                                 <i id="themeIcon" class="fa-solid fa-moon text-xs"></i>
                             </button>
+                            <a href="index.html" class="text-xs font-semibold bg-slate-800/80 hover:bg-slate-700 text-slate-200 px-3.5 py-2.5 rounded-xl transition border border-slate-700 flex items-center space-x-1.5">
+                                <i class="fa-solid fa-house text-slate-400"></i>
+                                <span>Main Hub</span>
+                            </a>
                             <a href="tracker.html" class="text-xs font-semibold bg-slate-800/80 hover:bg-slate-700 text-slate-200 px-3.5 py-2.5 rounded-xl transition border border-slate-700 flex items-center space-x-1.5">
                                 <i class="fa-solid fa-user-graduate text-slate-400"></i>
                                 <span>Student View</span>
@@ -558,8 +493,6 @@
                 </header>
 
                 <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1 w-full space-y-6">
-                    
-                    <!-- Search & Filter Ribbon -->
                     <div class="glass-card rounded-2xl p-5 border border-slate-800 flex flex-col md:flex-row md:items-center justify-between gap-4">
                         <div class="relative flex-1">
                             <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3.5 text-slate-500 text-xs"></i>
@@ -584,12 +517,11 @@
                         </div>
                     </div>
 
-                    <!-- Clean Priority Triage Feed -->
                     <div class="glass-card rounded-2xl p-5 border border-slate-800 space-y-4">
                         <div class="flex items-center justify-between border-b border-slate-800/80 pb-3">
                             <div>
                                 <h3 class="text-sm font-bold uppercase tracking-wider text-slate-300">Explainable Multi-Signal Triage Feed</h3>
-                                <p class="text-xs text-slate-400">Classifies student disengagement through a 4-Layer evaluation (Status, Trend, Persistence, Combined Pattern).</p>
+                                <p class="text-xs text-slate-400">Classifies student disengagement through 4-Layer evaluation (Status, Trend, Persistence, Combined Pattern).</p>
                             </div>
                             <span class="text-xs font-bold text-slate-500" id="feedCountLabel">0 Students</span>
                         </div>
@@ -616,7 +548,6 @@
             `;
         }
 
-        // Render Clean Triage Ledger
         function renderTriageLedger() {
             if (!activeDecryptedSession) return;
 
@@ -629,7 +560,6 @@
 
             let matchedCount = 0;
 
-            // Sort cohort by priority weight descending so most severe combined patterns appear at top
             const sortedCohort = [...liveCohort].sort((a, b) => {
                 return evaluate4LayerPattern(b).diagnosis.priorityWeight - evaluate4LayerPattern(a).diagnosis.priorityWeight;
             });
@@ -681,7 +611,6 @@
             document.getElementById('feedCountLabel').innerText = `${matchedCount} Active Profiles`;
         }
 
-        // Student 360° Drawer
         function openStudentModal(rollNo) {
             selectedStudentRoll = String(rollNo).trim();
             const student = liveCohort.find(s => s.rollNo === selectedStudentRoll);
@@ -697,7 +626,6 @@
             statusBadge.innerText = diagnosis.statusText;
             statusBadge.className = `text-[10px] font-bold px-2 py-0.5 rounded-full border ${diagnosis.badgeClass}`;
 
-            // Evidence Cards List (Explainable diagnosis)
             const evidenceEl = document.getElementById('modalEvidenceList');
             evidenceEl.innerHTML = '';
             diagnosis.evidence.forEach(item => {
@@ -716,7 +644,6 @@
                 evidenceEl.appendChild(card);
             });
 
-            // 4-Week Trajectory Curve
             const trajEl = document.getElementById('modalTrajectoryCurve');
             trajEl.innerHTML = '';
             student.trajectoryHistory.forEach(val => {
